@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -25,6 +25,8 @@ ChartJS.register(
 );
 
 const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => {
+  const chartRef = useRef(null);
+
   const data = {
     labels: labels,
     datasets: [
@@ -47,23 +49,59 @@ const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => 
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12,
+          },
+        },
       },
       title: {
         display: true,
         text: 'Oscar Nominations and Wins by Year',
+        font: {
+          size: window.innerWidth < 768 ? 14 : 16,
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12,
+          },
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12,
+          },
+        },
       },
     },
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (chartRef.current) {
+        chartRef.current.resize();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className="w-full mx-auto mt-5">
+    <div className="w-full h-64 md:h-96 mx-auto mt-5">
       {chartType === 'bar' ? (
-        <Bar data={data} options={options} />
+        <Bar ref={chartRef} data={data} options={options} />
       ) : (
-        <Line data={data} options={options} />
+        <Line ref={chartRef} data={data} options={options} />
       )}
     </div>
   );

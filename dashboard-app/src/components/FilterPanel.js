@@ -37,16 +37,16 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
       {/* Toggle Button */}
       <button
         onClick={() => setIsPanelOpen(!isPanelOpen)}
-        className="lg:hidden fixed top-4 right-4 p-2 bg-blue-500 text-white rounded shadow z-20"
+        className="lg:hidden fixed top-4 right-4 p-2 bg-cyan-700 text-white rounded shadow z-20"
       >
         {isPanelOpen ? 'Close Filters' : 'Open Filters'}
       </button>
 
       {/* Panel */}
       <div
-        className={`fixed lg:static inset-0 lg:inset-auto bg-white lg:bg-transparent z-10 transform transition-transform duration-300 ease-in-out ${isPanelOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        className={`fixed lg:static inset-0 lg:inset-auto bg-stone-300 lg:bg-transparent z-10 transform transition-transform duration-300 ease-in-out ${isPanelOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
-        <div className="w-64 h-full lg:h-auto p-4 bg-gray-50 border-r border-gray-200">
+        <div className="w-64 h-full lg:h-auto p-4 bg-stone-200 border-r border-gray-200">
           <h2 className="text-lg font-semibold mb-4">Filters</h2>
 
           {/* Search Bar */}
