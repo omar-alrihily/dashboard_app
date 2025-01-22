@@ -8,8 +8,10 @@ import FilterPanel from './components/FilterPanel';
 import PieChart from './components/PieChart';
 
 const App = () => {
-  const apiUrl = 'api/guK8Sdo'; // Replace with your actual API URL
-  const { data, loading, error } = DataFetching({ endpoint: apiUrl });
+  const proxyUrl = 'https://thingproxy.freeboard.io/fetch/';
+ const apiUrl = 'https://www.jsondataai.com/api/guK8Sdo';
+
+  const { data, loading, error } = DataFetching({ endpoint: proxyUrl + apiUrl});
   const [chartType, setChartType] = useState('bar'); // 'bar' or 'line'
   const [filters, setFilters] = useState({
     searchTerm: '',
