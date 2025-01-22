@@ -97,7 +97,7 @@ const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => 
   }, []);
 
   return (
-    <div className="w-full h-64 md:h-96 mx-auto mt-5">
+    <div className="w-full md:w-2/3 h-64 md:h-96 mx-auto mt-5">
       {chartType === 'bar' ? (
         <Bar ref={chartRef} data={data} options={options} />
       ) : (

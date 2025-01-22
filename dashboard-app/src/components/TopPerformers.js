@@ -59,7 +59,7 @@ const TopPerformers = ({ data }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Top Movies by IMDb Rating</h2>
+      <h2 className="text-xl font-bold mb-4 text-center mt-10">Top Movies by IMDb Rating</h2>
       <Table
         columns={columns}
         data={sortedData}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,7 +12,6 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
     const term = e.target.value;
     setSearchTerm(term);
     onSearch(term);
-    
   };
 
   const handleGenreChange = (e) => {
@@ -34,19 +34,31 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
 
   return (
     <>
-      {/* Toggle Button */}
-      <button
-        onClick={() => setIsPanelOpen(!isPanelOpen)}
-        className="lg:hidden fixed top-4 right-4 p-2 bg-cyan-700 text-white rounded shadow z-20"
-      >
-        {isPanelOpen ? 'Close Filters' : 'Open Filters'}
-      </button>
+      {/* Toggle Button (Only for Opening the Panel) */}
+      {!isPanelOpen && (
+        <button
+          onClick={() => setIsPanelOpen(true)}
+          className="lg:hidden  top-4 left-4 p-2 bg-stone-300 text-black rounded  z-20  transition-colors"
+        >
+          <Bars3Icon className="h-6 w-6" /> {/* Open icon */}
+        </button>
+      )}
 
       {/* Panel */}
       <div
-        className={`fixed lg:static inset-0 lg:inset-auto bg-stone-300 lg:bg-transparent z-10 transform transition-transform duration-300 ease-in-out ${isPanelOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        className={`fixed lg:static inset-0 lg:inset-auto bg-stone-300 lg:bg-transparent z-10 transform transition-transform duration-300 ease-in-out ${
+          isPanelOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
       >
         <div className="w-64 h-full lg:h-auto p-4 bg-stone-200 border-r border-gray-200">
+          {/* Close Button Inside the Panel */}
+          <button
+            onClick={() => setIsPanelOpen(false)}
+            className="lg:hidden absolute top-4 right-4 p-2 bg-stone-300 text-black rounded "
+          >
+            <XMarkIcon className="h-6 w-6" /> {/* Close icon */}
+          </button>
+
           <h2 className="text-lg font-semibold mb-4">Filters</h2>
 
           {/* Search Bar */}

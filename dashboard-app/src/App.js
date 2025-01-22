@@ -69,14 +69,32 @@ const App = () => {
       />
 
       {/* Main Content */}
-      <div className="flex-1 p-5 text-stone-800">
-        <h1 className="text-3xl font-bold mb-5 text-stone-800">Oscar Nominations & Wins</h1>
+      <div className="flex-1 p-5 text-stone-800 mt-15">
+        <h1 className="text-3xl font-bold mb-5 text-stone-800 text-center">MOVIES DASHBOARD</h1>
 
         {/* Display Top Movies */}
         <TopPerformers data={filteredMovies} type="movies" />
 
+        
+        {/* Pie Charts */}
+        <div className="flex flex-wrap mt-5">
+          <PieChart
+            title="Movies by Language"
+            labels={languageDistribution.labels}
+            data={languageDistribution.data}
+            colors={['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']}
+          />
+           <PieChart
+                title="Movies by Country"
+                labels={countryDistribution.labels}
+                data={countryDistribution.data}
+                colors={['#FF9F40', '#FFCD56', '#4BC0C0', '#9966FF', '#C9CBCF']}
+              />
+         
+        </div>
+
          {/* Chart Type Buttons */}
-         <div className="flex gap-3 mt-5">
+         <div className="flex gap-3 mt-20 justify-center ">
           <button
             onClick={() => setChartType('bar')}
             className={`px-4 py-2 rounded ${chartType === 'bar' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
@@ -94,22 +112,6 @@ const App = () => {
         {/* Oscar Chart */}
         {data && <OscarChart labels={labels} nominations={nominations} wins={wins} chartType={chartType} />}
 
-        {/* Pie Charts */}
-        <div className="flex flex-wrap mt-5">
-          <PieChart
-            title="Movies by Language"
-            labels={languageDistribution.labels}
-            data={languageDistribution.data}
-            colors={['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']}
-          />
-           <PieChart
-                title="Movies by Country"
-                labels={countryDistribution.labels}
-                data={countryDistribution.data}
-                colors={['#FF9F40', '#FFCD56', '#4BC0C0', '#9966FF', '#C9CBCF']}
-              />
-         
-        </div>
 
       
       </div>
