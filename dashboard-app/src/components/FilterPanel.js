@@ -38,7 +38,7 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
       {!isPanelOpen && (
         <button
           onClick={() => setIsPanelOpen(true)}
-          className="lg:hidden  top-4 left-4 p-2 bg-stone-300 text-black rounded  z-20  transition-colors"
+          className="lg:hidden fixed top-4 left-4 p-2 bg-stone-300 text-black rounded z-20 transition-colors hover:bg-stone-400"
         >
           <Bars3Icon className="h-6 w-6" /> {/* Open icon */}
         </button>
@@ -50,22 +50,22 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
           isPanelOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div className="w-64 h-full lg:h-auto p-4 bg-stone-200 border-r border-gray-200">
+        <div className="w-72 h-full lg:h-auto p-6 bg-stone-200 border-r border-gray-200">
           {/* Close Button Inside the Panel */}
           <button
             onClick={() => setIsPanelOpen(false)}
-            className="lg:hidden absolute top-4 right-4 p-2 bg-stone-300 text-black rounded "
+            className="lg:hidden absolute top-4 right-4 p-2 bg-stone-300 text-black rounded hover:bg-stone-400"
           >
             <XMarkIcon className="h-6 w-6" /> {/* Close icon */}
           </button>
 
-          <h2 className="text-lg font-semibold mb-4">Filters</h2>
+          <h2 className="text-xl font-semibold mb-6">Filters</h2>
 
           {/* Search Bar */}
-          <div className="mb-4">
+          <div className="mb-6">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search by title or overview..."
               value={searchTerm}
               onChange={handleSearch}
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
@@ -73,8 +73,8 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
           </div>
 
           {/* Genre Dropdown */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Genre</label>
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">Genre</label>
             <select
               value={selectedGenre}
               onChange={handleGenreChange}
@@ -82,16 +82,16 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
             >
               <option value="">All Genres</option>
               {genres.map((genre) => (
-                <option key={genre} value={genre}>
-                  {genre}
+                <option key={genre.id} value={genre.id}>
+                  {genre.name}
                 </option>
               ))}
             </select>
           </div>
 
           {/* Year Dropdown */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Year</label>
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">Year</label>
             <select
               value={selectedYear}
               onChange={handleYearChange}
@@ -107,8 +107,8 @@ const FilterPanel = ({ onSearch, onFilterChange, genres, years, countries }) => 
           </div>
 
           {/* Country Dropdown */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Country</label>
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">Country</label>
             <select
               value={selectedCountry}
               onChange={handleCountryChange}

@@ -25,15 +25,17 @@ const Table = ({ columns, data, sortBy, sortOrder, onSort }) => {
         <tbody>
           {data.map((row) => (
             <tr 
-              key={`${row.title}-${row.year}`} 
+              key={`${row.name}-${row.release_date}`} 
               className="border-b border-gray-200 hover:bg-gray-50"
             >
               {columns.map((column) => (
                 <td 
-                  key={`${row.title}-${row.year}-${column.key}`} 
+                  key={`${row.name}-${row.release_date}-${column.key}`} 
                   className="p-2"
                 >
-                  {row[column.key]}
+                  {column.key === 'release_date'
+                    ? new Date(row[column.key]).toLocaleDateString() // Format release date
+                    : row[column.key]}
                 </td>
               ))}
             </tr>

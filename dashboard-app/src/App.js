@@ -1,50 +1,91 @@
 import React, { useState } from 'react';
-import DataFetching from './services/DataFetching';
-import transformData from './utils/processOscarData';
-import { getLanguageDistribution, getCountryDistribution } from './utils/processOscarData';
-import OscarChart from './components/OscarChart';
+import useDataFetching from './services/DataFetching';
+import RatingTrendsChart from './components/RatingTrendsChart';
 import TopPerformers from './components/TopPerformers';
-import FilterPanel from './components/FilterPanel';
+import Sidebar from './components/Sidebar'; // Updated import
 import PieChart from './components/PieChart';
 
 const App = () => {
- // const proxyUrl = 'https://thingproxy.freeboard.io/fetch/';
- const apiUrl = 'https://www.jsondataai.com/api/guK8Sdo';
+  const apiUrl = 'trending/all/day'; // TMDB API endpoint for trending movies and TV shows
+  const { data, loading, error } = useDataFetching({ endpoint: apiUrl });
 
-  const { data, loading, error } = DataFetching({ endpoint: apiUrl });
-  const [chartType, setChartType] = useState('bar'); // 'bar' or 'line'
+  // Log the fetched data to the console
+  console.log('Fetched Data in App.js:', data);
+
+  const [chartType, setChartType] = useState('line'); // 'bar' or 'line'
   const [filters, setFilters] = useState({
     searchTerm: '',
-    genre: '',
+    media_type: '',
     year: '',
-    country: '',
+    rating: '',
   });
 
-  // Transform data for the chart
-  const { labels, nominations, wins } = data ? transformData(data) : { labels: [], nominations: [], wins: [] };
-
-  // Extract unique genres, years, and countries for dropdowns
-  const genres = data ? [...new Set(data.flatMap((movie) => movie.genre))] : [];
-  const years = data ? [...new Set(data.map((movie) => movie.year))] : [];
-  const countries = data ? [...new Set(data.flatMap((movie) => movie.country))] : [];
+  // Extract unique years for dropdown
+  const years = data
+    ? [...new Set(data.map((item) => new Date(item.release_date || item.first_air_date).getFullYear()))]
+    : [];
 
   // Filter data based on criteria
   const filteredMovies = data
-    ? data.filter((movie) => {
+    ? data.filter((item) => {
         const matchesSearch =
-          movie.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) || // Search by title
-          (movie.cast || []).some((actor) => actor.toLowerCase().includes(filters.searchTerm.toLowerCase())); // Search by cast
-        const matchesGenre = filters.genre ? movie.genre.includes(filters.genre) : true;
-        const matchesYear = filters.year ? movie.year === filters.year : true;
-        const matchesCountry = filters.country ? movie.country.includes(filters.country) : true;
-        return matchesSearch && matchesGenre && matchesYear && matchesCountry;
+          (item.title || item.name).toLowerCase().includes(filters.searchTerm.toLowerCase()) || // Search by title or name
+          (item.overview || '').toLowerCase().includes(filters.searchTerm.toLowerCase()); // Search by overview
+        const matchesMediaType = filters.media_type ? item.media_type === filters.media_type : true;
+        const matchesYear = filters.year
+          ? new Date(item.release_date || item.first_air_date).getFullYear() === Number(filters.year)
+          : true;
+        const matchesRating = filters.rating ? item.vote_average >= Number(filters.rating) : true;
+        return matchesSearch && matchesMediaType && matchesYear && matchesRating;
       })
     : [];
 
-  // Get language and country distribution
-  const languageDistribution = getLanguageDistribution(filteredMovies);
-  const countryDistribution = getCountryDistribution(filteredMovies);
-  
+  // Function to count movies and TV series
+  const getMediaTypeCounts = (data) => {
+    const mediaTypeCounts = {
+      movie: 0,
+      tv: 0,
+    };
+
+    if (!Array.isArray(data)) return mediaTypeCounts;
+
+    data.forEach((item) => {
+      if (item.media_type === 'movie') {
+        mediaTypeCounts.movie += 1;
+      } else if (item.media_type === 'tv') {
+        mediaTypeCounts.tv += 1;
+      }
+    });
+
+    return mediaTypeCounts;
+  };
+
+  // Get counts for movies and TV series
+  const mediaTypeCounts = getMediaTypeCounts(filteredMovies);
+  const mediaTypeLabels = ['Movies', 'TV Series'];
+  const mediaTypeData = [mediaTypeCounts.movie, mediaTypeCounts.tv];
+  const mediaTypeColors = ['#FF6384', '#36A2EB']; // Colors for movies and TV series
+
+  // Prepare rating trends data
+  const prepareRatingTrendsData = (data) => {
+    const yearData = {};
+
+    data.forEach((item) => {
+      const year = new Date(item.release_date || item.first_air_date).getFullYear();
+      if (!yearData[year]) {
+        yearData[year] = { totalRating: 0, count: 0 };
+      }
+      yearData[year].totalRating += item.vote_average;
+      yearData[year].count += 1;
+    });
+
+    const labels = Object.keys(yearData).sort();
+    const averageRatings = labels.map((year) => (yearData[year].totalRating / yearData[year].count).toFixed(2));
+
+    return { labels, averageRatings };
+  };
+
+  const { labels: ratingLabels, averageRatings } = prepareRatingTrendsData(filteredMovies);
 
   // Handle search and filter changes
   const handleSearch = (searchTerm) => {
@@ -60,62 +101,56 @@ const App = () => {
 
   return (
     <div className="flex flex-col lg:flex-row bg-stone-300 ">
-      {/* Filter Panel */}
-      <FilterPanel
+      {/* Sidebar */}
+      <Sidebar
         onSearch={handleSearch}
         onFilterChange={handleFilterChange}
-        genres={genres}
-        years={years}
-        countries={countries}
-        filters={filters}
+        years={years} // Pass only the years array
       />
 
       {/* Main Content */}
       <div className="flex-1 p-5 text-stone-800 mt-15">
-        <h1 className="text-3xl font-bold mb-5 text-stone-800 text-center">MOVIES DASHBOARD</h1>
+        <h1 className="text-3xl font-bold mb-5 text-stone-800 text-center">TRENDING MOVIES AND TV SHOWS</h1>
 
         {/* Display Top Movies */}
         <TopPerformers data={filteredMovies} type="movies" />
 
-        
-        {/* Pie Charts */}
+        {/* Pie Chart for Movies vs TV Series */}
         <div className="flex flex-wrap mt-5">
           <PieChart
-            title="Movies by Language"
-            labels={languageDistribution.labels}
-            data={languageDistribution.data}
-            colors={['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']}
+            title="Movies vs TV Series"
+            labels={mediaTypeLabels}
+            data={mediaTypeData}
+            colors={mediaTypeColors}
           />
-           <PieChart
-                title="Movies by Country"
-                labels={countryDistribution.labels}
-                data={countryDistribution.data}
-                colors={['#FF9F40', '#FFCD56', '#4BC0C0', '#9966FF', '#C9CBCF']}
-              />
-         
         </div>
 
-         {/* Chart Type Buttons */}
-         <div className="flex gap-3 mt-20 justify-center ">
-          <button
-            onClick={() => setChartType('bar')}
-            className={`px-4 py-2 rounded ${chartType === 'bar' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
-          >
-            Bar Chart
-          </button>
+        {/* Chart Type Buttons */}
+        <div className="flex gap-3 mt-20 justify-center ">
           <button
             onClick={() => setChartType('line')}
             className={`px-4 py-2 rounded ${chartType === 'line' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
           >
             Line Chart
           </button>
+          <button
+            onClick={() => setChartType('bar')}
+            className={`px-4 py-2 rounded ${chartType === 'bar' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
+          >
+            Bar Chart
+          </button>
         </div>
 
-        {/* Oscar Chart */}
-        {data && <OscarChart labels={labels} nominations={nominations} wins={wins} chartType={chartType} />}
-
-
-      
+        {/* Rating Trends Chart */}
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold mb-5 text-center">Rating Trends Over Time</h2>
+          <RatingTrendsChart
+            labels={ratingLabels}
+            nominations={averageRatings}
+            wins={[]} // No wins data for this chart
+            chartType={chartType}
+          />
+        </div>
       </div>
     </div>
   );

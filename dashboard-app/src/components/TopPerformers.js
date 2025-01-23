@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import Table from './Table';
 
 const TopPerformers = ({ data }) => {
-  const [sortBy, setSortBy] = useState('imdb_rating');
+  const [sortBy, setSortBy] = useState('vote_average'); // Default sorting by rating
   const [sortOrder, setSortOrder] = useState('desc');
   const [sortedData, setSortedData] = useState([]);
 
-  // Columns with new fields
+  // Columns with TMDB fields
   const columns = [
-    { key: 'title', label: 'Movie Title' },
-    { key: 'year', label: 'Year' },
-    { key: 'imdb_rating', label: 'IMDb Rating' },
-    { key: 'oscar_winning', label: 'Oscar Wins' },
-    { key: 'oscar_nominations', label: 'Oscar Nominations' },
+    { key: 'name', label: 'Title' }, // Use 'name' for both movies and TV shows
+    { key: 'media_type', label: 'Media Type' },
+    { key: 'release_date', label: 'Release Date' },
+    { key: 'vote_average', label: 'Rating' },
+    { key: 'vote_count', label: 'Votes' },
   ];
 
   useEffect(() => {
@@ -21,18 +21,25 @@ const TopPerformers = ({ data }) => {
       return;
     }
 
+    // Normalize data: Use 'name' for both movies and TV shows
+    const normalizedData = data.map((item) => ({
+      ...item,
+      name: item.title || item.name, // Use 'title' for movies and 'name' for TV shows
+      release_date: item.release_date || item.first_air_date, // Use 'release_date' for movies and 'first_air_date' for TV shows
+    }));
+
     // Deduplicate data
     const uniqueData = [...new Map(
-      data.map((movie) => [`${movie.title}-${movie.year}`, movie])
+      normalizedData.map((item) => [`${item.name}-${item.release_date}`, item])
     ).values()];
 
     // Sort logic
     const sorted = [...uniqueData].sort((a, b) => {
       const valueA = a[sortBy];
       const valueB = b[sortBy];
-      // ... (existing sorting logic)
-       // Handle undefined or null values
-       if (valueA == null || valueB == null) {
+
+      // Handle undefined or null values
+      if (valueA == null || valueB == null) {
         if (valueA == null && valueB == null) return 0;
         if (valueA == null) return sortOrder === 'asc' ? 1 : -1;
         return sortOrder === 'asc' ? -1 : 1;
@@ -51,15 +58,14 @@ const TopPerformers = ({ data }) => {
       }
 
       return 0;
-     
     });
 
-  setSortedData(sorted.slice(0, 5));
+    setSortedData(sorted.slice(0, 5)); // Show top 5 items
   }, [data, sortBy, sortOrder]);
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4 text-center mt-10">Top Movies by IMDb Rating</h2>
+      <h2 className="text-xl font-bold mb-4 text-center mt-10">Trending Movies</h2>
       <Table
         columns={columns}
         data={sortedData}

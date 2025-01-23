@@ -31,17 +31,10 @@ const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => 
     labels: labels,
     datasets: [
       {
-        label: 'Nominations',
+        label: 'Average Rating',
         data: nominations,
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1,
-      },
-      {
-        label: 'Wins',
-        data: wins,
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
     ],
@@ -61,7 +54,7 @@ const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => 
       },
       title: {
         display: true,
-        text: 'Oscar Nominations and Wins by Year',
+        text: 'Average Rating Over Time',
         font: {
           size: window.innerWidth < 768 ? 14 : 16,
         },
@@ -69,6 +62,10 @@ const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => 
     },
     scales: {
       x: {
+        title: {
+          display: true,
+          text: 'Release Year',
+        },
         ticks: {
           font: {
             size: window.innerWidth < 768 ? 10 : 12,
@@ -76,6 +73,10 @@ const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => 
         },
       },
       y: {
+        title: {
+          display: true,
+          text: 'Average Rating',
+        },
         ticks: {
           font: {
             size: window.innerWidth < 768 ? 10 : 12,
@@ -98,10 +99,11 @@ const OscarChart = ({ labels = [], nominations = [], wins = [], chartType }) => 
 
   return (
     <div className="w-full md:w-2/3 h-64 md:h-96 mx-auto mt-5">
-      {chartType === 'bar' ? (
-        <Bar ref={chartRef} data={data} options={options} />
-      ) : (
+      {chartType === 'line' ? (
         <Line ref={chartRef} data={data} options={options} />
+      ) : (
+        
+        <Bar ref={chartRef} data={data} options={options} />
       )}
     </div>
   );
