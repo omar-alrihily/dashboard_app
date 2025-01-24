@@ -118,7 +118,7 @@ const App = () => {
        {/* Pie Chart and Rating Trends Chart with Buttons in One Row for Medium and Large Screens */}
 <div className="md:flex lg:flex w-full mt-24">
   {/* Pie Chart */}
-  <div className="w-full lg:flex-none md:w-full lg:w-1/3 p-2">
+  <div className="w-full lg:flex-none md:mt-16 md:w-full lg:w-1/3 p-2">
     <PieChart
       title="Movies vs TV Series"
       labels={mediaTypeLabels}
