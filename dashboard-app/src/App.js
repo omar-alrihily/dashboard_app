@@ -10,7 +10,7 @@ const App = () => {
   const { data, loading, error } = useDataFetching({ endpoint: apiUrl });
 
   // Log the fetched data to the console
-  console.log('Fetched Data in App.js:', data);
+ //  console.log('Fetched Data in App.js:', data);
 
   const [chartType, setChartType] = useState('line'); // 'bar' or 'line'
   const [filters, setFilters] = useState({
@@ -64,7 +64,7 @@ const App = () => {
   const mediaTypeCounts = getMediaTypeCounts(filteredMovies);
   const mediaTypeLabels = ['Movies', 'TV Series'];
   const mediaTypeData = [mediaTypeCounts.movie, mediaTypeCounts.tv];
-  const mediaTypeColors = ['#FF6384', '#36A2EB']; // Colors for movies and TV series
+  const mediaTypeColors = ['#295a72', '#e6e7eb']; // Colors for movies and TV series
 
   // Prepare rating trends data
   const prepareRatingTrendsData = (data) => {
@@ -115,42 +115,48 @@ const App = () => {
         {/* Display Top Movies */}
         <TopPerformers data={filteredMovies} type="movies" />
 
-        {/* Pie Chart for Movies vs TV Series */}
-        <div className="flex flex-wrap mt-5">
-          <PieChart
-            title="Movies vs TV Series"
-            labels={mediaTypeLabels}
-            data={mediaTypeData}
-            colors={mediaTypeColors}
-          />
-        </div>
+       {/* Pie Chart and Rating Trends Chart with Buttons in One Row for Medium and Large Screens */}
+<div className="md:flex lg:flex w-full mt-24">
+  {/* Pie Chart */}
+  <div className="w-full lg:flex-none md:w-full lg:w-1/3 p-2">
+    <PieChart
+      title="Movies vs TV Series"
+      labels={mediaTypeLabels}
+      data={mediaTypeData}
+      colors={mediaTypeColors}
+    />
+  </div>
 
-        {/* Chart Type Buttons */}
-        <div className="flex gap-3 mt-20 justify-center ">
-          <button
-            onClick={() => setChartType('line')}
-            className={`px-4 py-2 rounded ${chartType === 'line' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
-          >
-            Line Chart
-          </button>
-          <button
-            onClick={() => setChartType('bar')}
-            className={`px-4 py-2 rounded ${chartType === 'bar' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
-          >
-            Bar Chart
-          </button>
-        </div>
+  {/* Container for Buttons and Rating Trends Chart */}
+  <div className="w-full md:w-1/2 lg:w-2/3 p-2">
+    {/* Chart Type Buttons */}
+    <div className="flex gap-3 justify-center md:justify-center">
+      <button
+        onClick={() => setChartType('line')}
+        className={`px-4 py-2 rounded ${chartType === 'line' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
+      >
+        Line Chart
+      </button>
+      <button
+        onClick={() => setChartType('bar')}
+        className={`px-4 py-2 rounded ${chartType === 'bar' ? 'bg-cyan-700 text-white' : 'bg-gray-200'}`}
+      >
+        Bar Chart
+      </button>
+    </div>
 
-        {/* Rating Trends Chart */}
-        <div className="mt-10">
-          <h2 className="text-2xl font-bold mb-5 text-center">Rating Trends Over Time</h2>
-          <RatingTrendsChart
-            labels={ratingLabels}
-            nominations={averageRatings}
-            wins={[]} // No wins data for this chart
-            chartType={chartType}
-          />
-        </div>
+    {/* Rating Trends Chart */}
+    <div className="mt-10">
+      
+      <RatingTrendsChart
+        labels={ratingLabels}
+        nominations={averageRatings}
+        wins={[]} 
+        chartType={chartType}
+      />
+    </div>
+  </div>
+</div>
       </div>
     </div>
   );

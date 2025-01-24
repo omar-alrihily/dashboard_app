@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+// const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const useDataFetching = ({ endpoint }) => {
   const [data, setData] = useState([]);
@@ -12,9 +12,9 @@ const useDataFetching = ({ endpoint }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/${endpoint}?api_key=${TMDB_API_KEY}&language=en-US`
+          `https://api.themoviedb.org/3/${endpoint}?api_key=deb35bfd26b90f06f7bf12b48fd7855b&language=en-US`
         );
-        console.log('Fetched Data from TMDB:', response.data.results); // Log the fetched data
+       // console.log('Fetched Data from TMDB:', response.data.results); // Log the fetched data
         setData(response.data.results); // TMDB API returns data in `results`
         setLoading(false);
       } catch (error) {

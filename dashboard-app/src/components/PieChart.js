@@ -40,7 +40,7 @@ const PieChart = ({ title, labels, data, colors }) => {
   };
 
   return (
-    <div className="w-full md:w-1/2 p-4">
+    <div className="w-full  p-4">
       <Pie data={chartData} options={options} />
     </div>
   );
