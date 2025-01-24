@@ -71,7 +71,11 @@ const Sidebar = ({ onSearch, onFilterChange, years }) => {
     </button>
 
     {/* Panel Content */}
-    <h2 className="text-xl font-semibold mb-6">Filters</h2>
+    <h2 data-testid="filters-header" className="text-xl font-semibold mb-6">
+     Filters
+     </h2>
+   
+                
 
     {/* Search Bar */}
     <div className="mb-6">
@@ -86,50 +90,58 @@ const Sidebar = ({ onSearch, onFilterChange, years }) => {
 
     {/* Media Type Dropdown */}
     <div className="mb-6">
-      <label className="block text-sm font-medium mb-2">Media Type</label>
-      <select
-        value={selectedMediaType}
-        onChange={handleMediaTypeChange}
-        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-      >
-        <option value="">All Types</option>
-        <option value="movie">Movie</option>
-        <option value="tv">TV Series</option>
-      </select>
-    </div>
+  <label htmlFor="media-type" className="block text-sm font-medium mb-2">
+    Media Type
+  </label>
+  <select
+    id="media-type"
+    value={selectedMediaType}
+    onChange={handleMediaTypeChange}
+    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+  >
+    <option value="">All Types</option>
+    <option value="movie">Movie</option>
+    <option value="tv">TV Series</option>
+  </select>
+</div>
 
     {/* Year Dropdown */}
     <div className="mb-6">
-      <label className="block text-sm font-medium mb-2">Year</label>
-      <select
-        value={selectedYear}
-        onChange={handleYearChange}
-        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-      >
-        <option value="">All Years</option>
-        {years.map((year) => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
-      </select>
-    </div>
+  <label htmlFor="year" className="block text-sm font-medium mb-2">
+    Year
+  </label>
+  <select
+    id="year"
+    value={selectedYear}
+    onChange={handleYearChange}
+    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+  >
+    <option value="">All Years</option>
+    {years.map((year) => (
+      <option key={year} value={year}>
+        {year}
+      </option>
+    ))}
+  </select>
+</div>
 
     {/* Rating Dropdown */}
     <div className="mb-6">
-      <label className="block text-sm font-medium mb-2">Rating</label>
-      <select
-        value={selectedRating}
-        onChange={handleRatingChange}
-        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-      >
-        <option value="">All Ratings</option>
-        <option value="7">Above 7</option>
-        <option value="8">Above 8</option>
-        <option value="9">Above 9</option>
-      </select>
-    </div>
-
+  <label htmlFor="rating" className="block text-sm font-medium mb-2">
+    Rating
+  </label>
+  <select
+    id="rating"
+    value={selectedRating}
+    onChange={handleRatingChange}
+    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+  >
+    <option value="">All Ratings</option>
+    <option value="7">Above 7</option>
+    <option value="8">Above 8</option>
+    <option value="9">Above 9</option>
+  </select>
+</div>
     {/* Clear Filters Button */}
     <button
       onClick={clearFilters}
