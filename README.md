@@ -3,6 +3,10 @@
 ## Description
 This project is a dynamic dashboard showcasing trending movies and TV shows. It provides various visualizations and tools to explore trending content, including tables, charts, and interactive search features.
 
+## Live Demo
+Check out the live demo of the application: [Trending Movies and TV Shows Dashboard](https://movie-dashboard-flfx.onrender.com/)
+
+
 ## Features
 - **Top 5 Movies and TV Shows Table**: Displays a ranked list of the top 5 trending movies and TV shows with key details.
 - **Pie Chart**: Visualizes the distribution of trending movies vs. TV shows.
