@@ -70,7 +70,7 @@ const TopPerformers = ({ data }) => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4 text-center mt-10">Trending Movies</h2>
+      <h2 className="text-xl font-bold mb-4 text-center mt-10">Trending Now</h2>
       <Table
         columns={columns}
         data={sortedData}

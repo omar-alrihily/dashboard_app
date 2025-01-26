@@ -41,6 +41,14 @@ This project is a dynamic dashboard showcasing trending movies and TV shows. It 
 
 5. Open your browser and navigate to `http://localhost:3000`.
 
+## Screenshots
+
+### Dashboard Overview
+![Dashboard Overview](./screenshots/ui-screenshot-1.png)
+
+### Charts and Tables
+![Charts and Tables](./screenshots/ui-screenshot-2.png)
+
 
 
 ---
