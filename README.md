@@ -44,10 +44,10 @@ This project is a dynamic dashboard showcasing trending movies and TV shows. It 
 ## Screenshots
 
 ### Dashboard Overview  
-![Dashboard Overview](./screenshots/ui-screenshot-1.png)
+![Dashboard Overview](./Screenshots/ui-screenshot-1.png)
 
 ### Charts and Tables
-![Charts and Tables](./screenshots/ui-screenshot-2.png)
+![Charts and Tables](./Screenshots/ui-screenshot-2.png)
 
 
 
