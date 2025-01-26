@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useDataFetching from './services/DataFetching';
 import RatingTrendsChart from './components/RatingTrendsChart';
 import TopPerformers from './components/TopPerformers';
-import Sidebar from './components/Sidebar'; // Updated import
+import Sidebar from './components/Sidebar'; 
 import PieChart from './components/PieChart';
 
 const App = () => {

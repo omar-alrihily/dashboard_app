@@ -10,7 +10,7 @@ const TopPerformers = ({ data }) => {
   const columns = [
     { key: 'name', label: 'Title' }, // Use 'name' for both movies and TV shows
     { key: 'media_type', label: 'Media Type' },
-    { key: 'release_date', label: 'Release Date' },
+    { key: 'year', label: 'Year' }, // Display only the year
     { key: 'vote_average', label: 'Rating' },
     { key: 'vote_count', label: 'Votes' },
   ];
@@ -22,15 +22,20 @@ const TopPerformers = ({ data }) => {
     }
 
     // Normalize data: Use 'name' for both movies and TV shows
-    const normalizedData = data.map((item) => ({
-      ...item,
-      name: item.title || item.name, // Use 'title' for movies and 'name' for TV shows
-      release_date: item.release_date || item.first_air_date, // Use 'release_date' for movies and 'first_air_date' for TV shows
-    }));
+    const normalizedData = data.map((item) => {
+      const releaseDate = item.release_date || item.first_air_date; // Use 'release_date' for movies and 'first_air_date' for TV shows
+      const year = releaseDate ? new Date(releaseDate).getFullYear() : null; // Extract the year
+
+      return {
+        ...item,
+        name: item.title || item.name, // Use 'title' for movies and 'name' for TV shows
+        year, // Add the extracted year
+      };
+    });
 
     // Deduplicate data
     const uniqueData = [...new Map(
-      normalizedData.map((item) => [`${item.name}-${item.release_date}`, item])
+      normalizedData.map((item) => [`${item.name}-${item.year}`, item])
     ).values()];
 
     // Sort logic
